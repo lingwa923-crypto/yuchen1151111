@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>樂智據點活動設計｜第2週2小時活動架構總覽（長輩友善大字版）</title>
+  <style>
+    :root {
+      --bg-outer: #0f172a;
+      --bg-stage: #fffdf9;
+      --bg-panel: #ffffff;
+      --bg-subtle: #f4f7f4;
+      --bg-warm: #fef7ec;
+      --text-main: #0f172a;
+      --text-secondary: #1e293b;
+      --text-muted: #334155;
+      --brand-green: #15803d;
+      --brand-green-light: #dcfce7;
+      --brand-teal: #0f766e;
+      --brand-amber: #b45309;
+      --brand-amber-light: #fef3c7;
+      --brand-rose: #be123c;
+      --brand-rose-light: #ffe4e6;
+      --brand-purple: #6d28d9;
+      --brand-purple-light: #ede9fe;
+      --border-color: #cbd5e1;
+      --shadow-card: 0 10px 28px rgba(15, 23, 42, 0.08);
+      --font-sans: -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+      --font-mono: "SF Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --font-scale: 1;
+    }
+
+    .presentation-stage.font-xl { --font-scale: 1.25; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg-outer); color: var(--text-main);
+      font-family: var(--font-sans); overflow: hidden;
+    }
+
+    .viewport-shell {
+      width: 100vw; height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: clamp(4px, 0.8vw, 12px);
+      background: radial-gradient(circle at 50% 15%, #1e293b 0%, #090d16 80%);
+    }
+    .viewport-shell.is-fullscreen { padding: 0; }
+
+    .presentation-stage {
+      position: relative;
+      width: min(100%, calc((100vh - 16px) * 16 / 9));
+      aspect-ratio: 16 / 9; max-height: 100%;
+      background: var(--bg-stage);
+      border-radius: clamp(10px, 1.2vw, 20px);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      display: flex; flex-direction: column; justify-content: space-between;
+      overflow: hidden; container-type: inline-size;
+    }
+    .viewport-shell.is-fullscreen .presentation-stage {
+      width: 100vw; height: 100vh; aspect-ratio: auto; border-radius: 0; border: none;
+    }
+
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; padding: 1% 2.2%; background: #ffffff;
+      border-bottom: 2px solid #cbd5e1; z-index: 20; flex-shrink: 0;
+    }
+    .brand-title {
+      display: flex; align-items: center; gap: 8px;
+      font-size: calc(clamp(15px, 1.45cqi, 22px) * var(--font-scale));
+      font-weight: 900; color: var(--brand-green); white-space: nowrap;
+    }
+    .brand-badge {
+      background: var(--brand-green-light); color: #14532d;
+      padding: 4px 12px; border-radius: 999px;
+      font-size: calc(clamp(13px, 1.2cqi, 18px) * var(--font-scale));
+      font-weight: 900; white-space: nowrap;
+    }
+
+    .slide-nav-strip {
+      display: flex; align-items: center; gap: 6px;
+      overflow-x: auto; max-width: 50%; padding: 3px 4px; scrollbar-width: none;
+    }
+    .slide-nav-strip::-webkit-scrollbar { display: none; }
+
+    .nav-pill {
+      appearance: none; border: 2px solid #cbd5e1; background: #f8fafc;
+      color: var(--text-secondary); font-family: var(--font-sans);
+      font-size: calc(clamp(13.5px, 1.22cqi, 18px) * var(--font-scale));
+      font-weight: 900; padding: 6px 13px; border-radius: 999px;
+      cursor: pointer; white-space: nowrap; transition: all 0.2s ease;
+    }
+    .nav-pill:hover { background: #e2e8f0; color: var(--text-main); }
+    .nav-pill.active {
+      background: var(--brand-green); border-color: var(--brand-green);
+      color: #ffffff; box-shadow: 0 3px 10px rgba(21, 128, 61, 0.32);
+    }
+
+    .timer-toolbar { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+    .timer-box {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #fef3c7; border: 2px solid #f59e0b; color: #92400e;
+      padding: 5px 13px; border-radius: 999px; font-family: var(--font-mono);
+      font-size: calc(clamp(14.5px, 1.35cqi, 20px) * var(--font-scale)); font-weight: 900;
+    }
+    .util-btn {
+      appearance: none; border: 2px solid #94a3b8; background: #f8fafc;
+      color: var(--text-main); font-family: var(--font-sans);
+      font-size: calc(clamp(13px, 1.15cqi, 17.5px) * var(--font-scale));
+      font-weight: 900; padding: 5px 12px; border-radius: 10px;
+      cursor: pointer; transition: background 0.15s ease;
+    }
+    .util-btn:hover { background: #e2e8f0; }
+    .util-btn.active-zoom { background: #fef3c7; border-color: #d97706; color: #92400e; }
+
+    .slides-body {
+      position: relative; flex: 1; width: 100%; overflow: hidden;
+      background:
+        radial-gradient(circle at 92% 10%, rgba(220, 252, 231, 0.7) 0%, transparent 38%),
+        radial-gradient(circle at 8% 90%, rgba(254, 243, 199, 0.7) 0%, transparent 40%),
+        var(--bg-stage);
+    }
+    .slide {
+      position: absolute; inset: 0; padding: 1.6% 2.6% 1.4%;
+      display: flex; flex-direction: column; justify-content: flex-start; gap: 14px;
+      overflow-y: auto; opacity: 0; visibility: hidden; pointer-events: none;
+      transform: translateY(10px);
+      transition: opacity 0.32s ease, transform 0.32s ease, visibility 0.32s;
+    }
+    .slide.active { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); }
+
+    .slide-head {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 16px; border-bottom: 3px solid rgba(21, 128, 61, 0.25);
+      padding-bottom: 8px; flex-shrink: 0;
+    }
+    .step-kicker {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: calc(clamp(13.5px, 1.25cqi, 18.5px) * var(--font-scale));
+      font-weight: 900; color: var(--brand-teal); background: #ccfbf1;
+      padding: 4px 12px; border-radius: 999px; margin-bottom: 4px;
+    }
+    .slide-title {
+      font-size: calc(clamp(24px, 2.8cqi, 42px) * var(--font-scale));
+      font-weight: 900; color: #0f172a; line-height: 1.2;
+    }
+    .duration-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--brand-amber-light); color: #92400e;
+      border: 2px solid #f59e0b; padding: 6px 16px; border-radius: 999px;
+      font-size: calc(clamp(14.5px, 1.38cqi, 21px) * var(--font-scale));
+      font-weight: 900; white-space: nowrap;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; flex: 1; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; flex: 1; }
+    .grid-6 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; flex: 1; }
+
+    .card {
+      background: var(--bg-panel); border: 2px solid var(--border-color);
+      border-radius: 16px; padding: clamp(14px, 1.5cqi, 22px);
+      box-shadow: var(--shadow-card);
+      display: flex; flex-direction: column; justify-content: space-between; gap: 10px;
+    }
+    .card-title {
+      font-size: calc(clamp(18px, 1.85cqi, 28px) * var(--font-scale));
+      font-weight: 900; color: #0f172a;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 8px; margin-bottom: 4px; line-height: 1.3;
+    }
+    .card-body-text {
+      font-size: calc(clamp(16px, 1.55cqi, 23px) * var(--font-scale));
+      color: var(--text-secondary); line-height: 1.6; font-weight: 600;
+    }
+    .cue-box {
+      background: #dcfce7; border-left: 6px solid var(--brand-green);
+      padding: 10px 14px; border-radius: 10px;
+      font-size: calc(clamp(15px, 1.48cqi, 22px) * var(--font-scale));
+      font-weight: 900; color: #14532d; margin-top: 6px; line-height: 1.48;
+    }
+    .warn-tag {
+      display: inline-block; color: var(--brand-rose); background: var(--brand-rose-light);
+      border: 1.5px solid #fda4af; padding: 5px 12px; border-radius: 8px;
+      font-size: calc(clamp(14px, 1.32cqi, 19.5px) * var(--font-scale));
+      font-weight: 900; margin-top: 6px;
+    }
+    .ext-link { color: var(--brand-teal); font-weight: 900; text-decoration: underline; text-underline-offset: 3px; }
+    .video-ref-line {
+      margin-top: 6px;
+      font-size: calc(clamp(13.5px, 1.25cqi, 18.5px) * var(--font-scale));
+      font-weight: 800; color: var(--text-muted);
+    }
+
+    .schedule-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; flex: 1; }
+    .sched-item {
+      background: #ffffff; border: 2.5px solid #94a3b8; border-radius: 16px;
+      padding: clamp(12px, 1.35cqi, 20px); cursor: pointer;
+      display: flex; flex-direction: column; justify-content: space-between; gap: 8px;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    .sched-item:hover {
+      transform: translateY(-2px); border-color: var(--brand-green);
+      box-shadow: 0 12px 24px rgba(21, 128, 61, 0.15);
+    }
+    .sched-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+    .sched-num {
+      font-family: var(--font-mono);
+      font-size: calc(clamp(13.5px, 1.25cqi, 18.5px) * var(--font-scale));
+      font-weight: 900; padding: 4px 10px; border-radius: 999px;
+      background: var(--brand-green-light); color: #14532d;
+    }
+    .sched-min {
+      font-family: var(--font-mono);
+      font-size: calc(clamp(14.5px, 1.35cqi, 20px) * var(--font-scale));
+      font-weight: 900; color: var(--brand-amber);
+    }
+    .sched-name {
+      font-size: calc(clamp(18px, 1.8cqi, 26px) * var(--font-scale));
+      font-weight: 900; color: #0f172a; line-height: 1.28;
+    }
+    .sched-desc {
+      font-size: calc(clamp(15px, 1.42cqi, 21px) * var(--font-scale));
+      color: var(--text-secondary); line-height: 1.52; font-weight: 600;
+    }
+
+    .ro-board {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border: 3px solid #f59e0b; border-radius: 18px;
+      padding: clamp(14px, 1.5cqi, 22px);
+      display: flex; flex-direction: column; justify-content: space-between; gap: 12px;
+    }
+    .ro-inputs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .ro-field { background: #ffffff; border: 2px solid #f59e0b; border-radius: 12px; padding: 8px 12px; }
+    .ro-field label {
+      display: block;
+      font-size: calc(clamp(13.5px, 1.25cqi, 18px) * var(--font-scale));
+      font-weight: 900; color: #92400e; margin-bottom: 4px;
+    }
+    .ro-field input, .ro-field select {
+      width: 100%; border: none; background: transparent; font-family: var(--font-sans);
+      font-size: calc(clamp(17px, 1.65cqi, 24px) * var(--font-scale));
+      font-weight: 900; color: #0f172a; outline: none;
+    }
+    .ro-script-preview {
+      background: #ffffff; border-radius: 14px; padding: 14px 16px;
+      border: 3px dashed #d97706;
+      font-size: calc(clamp(17.5px, 1.72cqi, 26px) * var(--font-scale));
+      line-height: 1.65; color: #0f172a; font-weight: 800;
+    }
+
+    .festival-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px; }
+    .fest-btn {
+      appearance: none; border: 2px solid #cbd5e1; background: #f8fafc;
+      border-radius: 12px; padding: 10px 6px; cursor: pointer;
+      text-align: center; font-family: var(--font-sans); transition: all 0.15s ease;
+    }
+    .fest-btn:hover { border-color: var(--brand-purple); background: #f5f3ff; }
+    .fest-btn.active {
+      background: var(--brand-purple); color: #ffffff;
+      border-color: var(--brand-purple); box-shadow: 0 4px 12px rgba(109, 40, 217, 0.3);
+    }
+    .fest-btn-name {
+      font-size: calc(clamp(15.5px, 1.5cqi, 22px) * var(--font-scale));
+      font-weight: 900; display: block;
+    }
+    .fest-btn-sub {
+      font-size: calc(clamp(13px, 1.2cqi, 17.5px) * var(--font-scale));
+      font-weight: 700; opacity: 0.92; display: block; margin-top: 3px;
+    }
+    .snap-showcase {
+      margin-top: 10px; background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+      border: 2.5px solid #7c3aed; border-radius: 14px; padding: 12px 16px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .snap-pair-pills { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .snap-card-pill {
+      background: #ffffff; border: 2.5px solid #6d28d9; color: #4c1d95;
+      padding: 6px 14px; border-radius: 999px;
+      font-size: calc(clamp(15px, 1.48cqi, 22px) * var(--font-scale)); font-weight: 900;
+    }
+
+    .bottombar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9% 2.4%; background: #ffffff; border-top: 2px solid #cbd5e1;
+      z-index: 20; flex-shrink: 0;
+    }
+    .footer-note {
+      font-size: calc(clamp(13.5px, 1.25cqi, 18px) * var(--font-scale));
+      color: var(--text-muted); font-weight: 800;
+    }
+    .nav-btn-group { display: flex; align-items: center; gap: 10px; }
+    .page-btn {
+      appearance: none; border: 2px solid #94a3b8; background: #ffffff;
+      color: var(--text-main); font-family: var(--font-sans);
+      font-size: calc(clamp(14.5px, 1.38cqi, 20.5px) * var(--font-scale));
+      font-weight: 900; padding: 7px 20px; border-radius: 999px;
+      cursor: pointer; transition: all 0.15s ease;
+    }
+    .page-btn:hover:not(:disabled) { background: #f1f5f9; border-color: #64748b; }
+    .page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .page-btn.primary { background: var(--brand-green); color: #ffffff; border-color: var(--brand-green); }
+    .page-btn.primary:hover:not(:disabled) { background: #166534; }
+  </style>
+</head>
+<body>
+  <div class="viewport-shell" id="viewportShell">
+    <main class="presentation-stage" id="presentationStage" aria-label="樂智據點第2週活動設計簡報">
+      <header class="topbar">
+        <div class="brand-title">
+          <span>🌱 樂智據點活動設計</span>
+          <span class="brand-badge">第 2 週｜認知力：動腦、動身體、多互動</span>
+        </div>
+
+        <nav class="slide-nav-strip" aria-label="活動階段投影片切換">
+          <button type="button" class="nav-pill active" data-slide="0">總覽</button>
+          <button type="button" class="nav-pill" data-slide="1">1.暖身(10m)</button>
+          <button type="button" class="nav-pill" data-slide="2">2.音樂律動(20m)</button>
+          <button type="button" class="nav-pill" data-slide="3">3.主運動(20m)</button>
+          <button type="button" class="nav-pill" data-slide="4">4.休息衛教(10m)</button>
+          <button type="button" class="nav-pill" data-slide="5">5.播報員(10m)</button>
+          <button type="button" class="nav-pill" data-slide="6">6.認知找碴(40m)</button>
+          <button type="button" class="nav-pill" data-slide="7">7.回饋預告(10m)</button>
+        </nav>
+
+        <div class="timer-toolbar">
+          <button type="button" class="util-btn" id="fontZoomBtn" title="切換標準大字與特大長輩字體">🔍 特大字</button>
+          <div class="timer-box" title="本階段課堂倒數計時器">
+            <span>⏱</span>
+            <span id="timerDisplay">120:00</span>
+          </div>
+          <button type="button" class="util-btn" id="timerToggleBtn">▶ 計時</button>
+          <button type="button" class="util-btn" id="timerResetBtn">↺ 重設</button>
+          <button type="button" class="util-btn" id="fullscreenBtn">⛶ 全螢幕</button>
+        </div>
+      </header>
+
+      <div class="slides-body">
+        <!-- SLIDE 0: 總覽封面 -->
+        <section class="slide active" data-duration="120" id="slide-0">
+          <div class="slide-head">
+            <div>
+              <span class="step-kicker">WEEK 02 · ICOPE 認知力：動腦、動身體、多互動（指導員帶領簡報）</span>
+              <h1 class="slide-title">第2週2小時活動架構總覽</h1>
+            </div>
+            <span class="duration-pill">🕒 總時長：120 分鐘｜課程參考：<a class="ext-link" href="https://mattsue1003.github.io/senior-health-12/weeks/w02.html" target="_blank" rel="noopener">高齡健康第2週</a></span>
+          </div>
+
+          <div class="card" style="padding: 12px 18px; background: #f0fdf4; border-color: #86efac; flex-shrink: 0;">
+            <div class="card-body-text" style="color: #14532d; font-weight: 800;">
+              <strong>🎯 本週核心目標與安全檢核：</strong>
+              ① 學會用坐姿有氧與彈力帶完成一整段運動，並記錄自覺費力程度（RPE）｜
+              ② 分辨「正常老化 vs. 失智警訊」，掌握預防失智「趨吉避凶」｜
+              ③ 課前量血壓（≥180 mmHg 休息）、確認水杯與椅子穩固、彈力帶拉開時<strong>吐氣不憋氣</strong>（點擊下方卡片直接跳轉）。
+            </div>
+          </div>
+
+          <div class="schedule-grid">
+            <div class="sched-item" data-jump="1" tabindex="0" role="button">
+              <div class="sched-top"><span class="sched-num">STAGE 01</span><span class="sched-min">10 分鐘</span></div>
+              <div class="sched-name">1. 暖身運動</div>
+              <div class="sched-desc">椅子 6 式關節喚醒：深呼吸擴胸、頸部慢轉、聳肩繞圈、軀幹左右轉、腳踝勾踩、原地踏步。</div>
+            </div>
+
+            <div class="sched-item" data-jump="2" tabindex="0" role="button">
+              <div class="sched-top"><span class="sched-num">STAGE 02</span><span class="sched-min">20 分鐘</span></div>
+              <div class="sched-name">2. 音樂律動</div>
+              <div class="sched-desc">第 2 週老歌帶動跳：《望春風》、《春風吻上我的臉》、《歡喜乾杯》，結合雙手舉杯與鄰座擊掌。</div>
+            </div>
+
+            <div class="sched-item" data-jump="3" tabindex="0" role="button">
+              <div class="sched-top"><span class="sched-num">STAGE 03</span><span class="sched-min">20 分鐘</span></div>
+              <div class="sched-name">3. 主運動（彈力帶/體能）</div>
+              <div class="sched-desc">彈力帶開腿、彈力帶胸推、扶椅提踵、坐姿抱膝縮腹，搭配歡樂團體遊戲「氣球不落地」。</div>
+            </div>
+
+            <div class="sched-item" data-jump="4" tabindex="0" role="button">
+              <div class="sched-top"><span class="sched-num">STAGE 04</span><span class="sched-min">10 分鐘</span></div>
+              <div class="sched-name">4. 休息補水與護腦衛教</div>
+              <div class="sched-desc">防嗆咳溫水補充、RPE 自覺費力檢視，以及 ICOPE 認知力「正常老化 vs. 失智警訊」趨吉避凶衛教。</div>
+            </div>
+
+            <div class="sched-item" data-jump="5" tabindex="0" role="button">
+              <div class="sched-top"><span class="sched-num">STAGE 05</span><span class="sched-min">10 分鐘</span></div>
+              <div class="sched-name">5. 長輩日期時間播報員</div>
+              <div class="sched-desc">邀請 2 位長輩擔任今日播報員（日期/星期/天氣/護腦口訣），串聯現實導向與臺灣歷史記憶。</div>
+            </div>
+
+            <div class="sched-item" data-jump="6" tabindex="0" role="button" style="grid-column: span 2; background: linear-gradient(135deg, #ffffff 0%, #f5f3ff 100%); border-color: #a78bfa;">
+              <div class="sched-top"><span class="sched-num" style="background: var(--brand-purple-light); color: var(--brand-purple);">STAGE 06 · 核心認知互動</span><span class="sched-min">40 分鐘</span></div>
+              <div class="sched-name">6. 認知活動：《臺灣歷史時光機—大家來找碴》</div>
+              <div class="sched-desc">8 段臺灣關鍵歷史記憶關卡（1948–2024），每關比對原圖與找碴圖找出 4 處相異點（共 32 處），解鎖歷史知識卡並進行生命故事懷舊分享。</div>
+            </div>
+
+            <div class="sched-item" data-jump="7" tabindex="0" role="button">
+              <div class="sched-top"><span class="sched-num">STAGE 07</span><span class="sched-min">10 分鐘</span></div>
+              <div class="sched-name">7. 長輩回饋及下次預告</div>
+              <div class="sched-desc">全身 10 式伸展緩和、4F 結構化回饋、防失智手指操回家作業與第 3 週「行動力：肌少症」預告。</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 1: 1. 暖身 (10分) -->
+        <section class="slide" data-duration="10" id="slide-1">
+          <div class="slide-head">
+            <div>
+              <span class="step-kicker">STAGE 01 · 關節活化與心肺預熱（全體坐姿・配合輕快音樂）</span>
+              <h2 class="slide-title">1. 暖身運動（坐姿安全暖身 6 式）</h2>
+            </div>
+            <span class="duration-pill">⏱ 時段：10 分鐘｜姿勢：坐穩椅子前 2/3</span>
+          </div>
+
+          <div class="grid-6">
+            <div class="card">
+              <div>
+                <div class="card-title"><span>① 深呼吸與擴胸</span><span class="brand-badge">6 次</span></div>
+                <p class="card-body-text">雙腳平放與肩同寬；鼻子吸氣 4 拍雙手向外向上畫大圈打開胸廓，嘴巴慢吐 6 拍雙手回大腿。</p>
+              </div>
+              <div>
+                <div class="cue-box">🗣 口令：「吸～打開胸口，吐～慢慢放下」</div>
+                <span class="warn-tag">⚠ 頭暈者立即停下休息</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div>
+                <div class="card-title"><span>② 頸部慢轉</span><span class="brand-badge">左右各 5 次</span></div>
+                <p class="card-body-text">頭慢慢轉向右肩停 2 秒 → 回正轉左肩；接著下巴輕點頭、微抬頭看前上方，喚醒頸部肌群。</p>
+              </div>
+              <div>
+                <div class="cue-box">🗣 口令：「慢慢看右邊，回來，看左邊」</div>
+                <span class="warn-tag">⚠ 頸椎不畫大圈、不快速後仰</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div>
+                <div class="card-title"><span>③ 聳肩與肩繞圈</span><span class="brand-badge">8 次＋各 8 圈</span></div>
+                <p class="card-body-text">雙肩向上聳到耳朵停 2 秒後放鬆落下（8 次）；接著雙肩向後畫大圈 8 次、向前畫圈 8 次（為彈力帶暖身）。</p>
+              </div>
+              <div>
+                <div class="cue-box">🗣 口令：「肩膀上～放鬆落下！往後畫大圈～」</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div>
+                <div class="card-title"><span>④ 軀幹左右轉</span><span class="brand-badge">左右各 8 次</span></div>
+                <p class="card-body-text">雙手抱胸或平舉胸前，骨盆坐穩不動，上半身慢慢向右轉、眼睛看後方停 2 秒，回正換左邊。</p>
+              </div>
+              <div>
+                <div class="cue-box">🗣 口令：「轉～看後面，吐氣慢慢回來」</div>
+                <span class="warn-tag">⚠ 骨質疏鬆長輩轉幅縮小</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div>
+                <div class="card-title"><span>⑤ 腳踝畫圈與勾腳尖</span><span class="brand-badge">每腳各 1 輪</span></div>
+                <p class="card-body-text">單腳向前伸直離地，順時針與逆時針各畫圈 8 次；再將腳尖用力勾起、往下踩各 10 次，促進下肢循環。</p>
+              </div>
+              <div>
+                <div class="cue-box">🗣 口令：「腳踝畫圈圈～用力勾、用力踩」</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div>
+                <div class="card-title"><span>⑥ 坐姿原地踏步</span><span class="brand-badge">1～2 分鐘</span></div>
+                <p class="card-body-text">雙手扶椅側或自然擺臂，左右腳輪流抬起踏步（膝蓋離椅面約一個拳頭高），配合音樂節奏逐步加快。</p>
+              </div>
+              <div>
+                <div class="cue-box">🗣 口令：「一二、一二，手擺起來、腳抬高！」</div>
+                <div class="video-ref-line">參考影片：<a class="ext-link" href="https://www.youtube.com/watch?v=ilcK3lOImdI" target="_blank" rel="noopener">北市體育局椅子有氧訓練</a></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 2: 2. 音樂律動 (20分) -->
+        <section class="slide" data-duration="20" id="slide-2">
+          <div class="slide-head">
+            <div>
+              <span class="step-kicker">STAGE 02 · 第 2 週老歌帶動跳（坐姿為主・站姿扶椅背進階）</span>
+              <h2 class="slide-title">2. 音樂律動：《望春風》、《春風吻上我的臉》、《歡喜乾杯》</h2>
+            </div>
+            <span class="duration-pill">⏱ 時段：20 分鐘｜原則：慢板 → 中板 → 快板社交互動</span>
+          </div>
+
+          <div class="grid-3">
+            <div class="card">
+              <div>
+                <div class="card-title"><span>🎵 第一首：《望春風》</span><span class="brand-badge">台語・慢板入門</span></div>
+                <ul class="card-body-text" style="padding-left: 22px; display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
+                  <li><strong>前奏：</strong>深呼吸兩次，雙手隨吸氣向外打開、吐氣合上。</li>
+                  <li><strong>主歌：</strong>雙手像風吹一樣從右側慢慢掃到左側，身體隨之旋轉。</li>
+                  <li><strong>副歌：</strong>雙手向上做「摘花」動作再放到胸口，左右交替。</li>
+                  <li><strong>間奏：</strong>肩膀向後畫圈 8 次、向前畫圈 8 次。</li>
+                  <li><strong>尾奏：</strong>雙手扶膝，慢慢前傾再挺直收尾。</li>
+                  <li><strong>⬆ 站姿版（扶椅背）：</strong>主歌加上重心左右移動；副歌摘花時配合點腳尖。</li>
+                </ul>
+              </div>
+              <div>
+                <div class="cue-box">💡 失智引導：慢板旋律熟悉度極高，鼓勵長輩邊做動作邊開口哼唱</div>
+                <div class="video-ref-line">🎬 影片：<a class="ext-link" href="https://youtu.be/PJw4S9v3flk" target="_blank" rel="noopener">悠活健康促進《望春風》帶動跳</a></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div>
+                <div class="card-title"><span>🎵 第二首：《春風吻上我的臉》</span><span class="brand-badge">國語・中板入門</span></div>
+                <ul class="card-body-text" style="padding-left: 22px; display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
+                  <li><strong>前奏：</strong>雙手在臉頰旁輕輕扇風，帶出微笑表情。</li>
+                  <li><strong>主歌：</strong>右手從臉頰劃到斜上方，換左手；雙腳腳跟輪流向前點。</li>
+                  <li><strong>副歌：</strong>雙手高舉左右搖擺如柳枝，身體隨之搖曳。</li>
+                  <li><strong>間奏：</strong>肩膀聳放 8 次，配合頸部左右慢轉。</li>
+                  <li><strong>尾奏：</strong>雙手扇風回到臉頰托腮，保持微笑。</li>
+                  <li><strong>⬆ 站姿版（扶椅背）：</strong>重心左右移動配合搖擺，副歌加上腳側點步。</li>
+                </ul>
+              </div>
+              <div>
+                <div class="cue-box">💡 失智引導：「手劃斜上＋腳跟前點」構成手腳協調雙重任務</div>
+                <div class="video-ref-line">🎬 影片：<a class="ext-link" href="https://youtu.be/gAKqAsgxWNA" target="_blank" rel="noopener">悠活健康促進《春風吻上我的臉》</a></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div>
+                <div class="card-title"><span>🎵 第三首：《歡喜乾杯》</span><span class="brand-badge">台語・快板進階</span></div>
+                <ul class="card-body-text" style="padding-left: 22px; display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
+                  <li><strong>前奏：</strong>雙手握拳在胸前互敲（模擬熱情敬酒乾杯）。</li>
+                  <li><strong>主歌：</strong>右手舉杯向右、左手舉杯向左，雙腳同步左右側點。</li>
+                  <li><strong>副歌「歡喜乾杯」：</strong>雙手向上高舉酒杯，雙腳踏步加快！</li>
+                  <li><strong>間奏：</strong>轉身雙手拍鄰座夥伴的手（左、右交替擊掌互動）。</li>
+                  <li><strong>尾奏：</strong>全班一起舉杯高呼「乾～杯！」。</li>
+                  <li><strong>⬆ 站姿版（扶椅背）：</strong>扶椅背踏步舉杯，副歌改為開合步（手腳同步開合）。</li>
+                </ul>
+              </div>
+              <div>
+                <div class="cue-box">💡 失智引導：快板節奏搭配鄰座擊掌與高呼「乾杯」，瞬間炒熱團體氣氛！</div>
+                <div class="video-ref-line">🎬 影片：<a class="ext-link" href="https://youtu.be/rHkCUWj-i_k" target="_blank" rel="noopener">銀髮族坐姿運動《歡喜乾杯》（黃鈺鎂老師）</a></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 3: 3. 主運動 (20分) -->
+        <section class="slide" data-duration="20" id="slide-3">
+          <div class="slide-head">
+            <div>
+              <span class="step-kicker">STAGE 03 · 彈力帶阻力訓練 × 核心下肢 × 趣味體能活動</span>
+              <h2 class="slide-title">3. 主運動：彈力帶肌力（動作 10–13）＋ 氣球不落地（動作 14）</h2>
+            </div>
+            <span class="duration-pill">⏱ 時段：20 分鐘｜教具：彈力帶・大氣球（2～3 顆）</span>
+          </div>
+
+          <div class="grid-3">
+            <div class="card">
+              <div>
+                <div class="card-title"><span>🎗️ 一、彈力帶上下肢阻力</span><span class="brand-badge">8 分鐘</span></div>
+                <ul class="card-body-text" style="padding-left: 22px; display: flex; flex-direction: column; gap: 8px; margin-top: 6px;">
+                  <li><strong>動作 10｜彈力帶開腿（15次 × 2組）：</strong><br />坐姿將彈力帶綁在大腿靠近膝蓋上方，雙腳與肩同寬；吐氣時雙膝向外撐開停 2 秒，吸氣慢慢收回（強化臀中肌、穩定骨盆防跌）。</li>
+                  <li><strong>動作 11｜彈力帶胸推（12次 × 2組）：</strong><br />彈力帶繞過背後由腋下穿出，雙手抓緊兩端於胸前；吐氣時雙手向前推直，吸氣慢收（強化胸大肌與上肢推力）。</li>
+                </ul>
+              </div>
+              <div>
+                <div class="cue-box">🗣 口令：「往外開～吐氣 1、2，慢慢收！用力不憋氣」</div>
+                <span class="warn-tag">⚠ 彈力帶務必抓牢纏穩，避免鬆脫回彈</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div>
+                <div class="card-title"><span>🦵 二、下肢與核心肌群強化</span><span class="brand-badge">7 分鐘</span></div>
+                <ul class="card-body-text" style="padding-left: 22px; display: flex; flex-direction: column; gap: 8px; margin-top: 6px;">
+                  <li><strong>動作 12｜扶椅提踵（15次 × 2組）：</strong><br />站在椅子後方雙手輕扶椅背，雙腳腳跟用力抬起踮腳尖停 2 秒，再慢慢放下（⬇降階：坐姿踮腳跟勾腳尖；⬆進階：單手扶椅）。</li>
+                  <li><strong>動作 13｜坐姿抱膝縮腹（每腳 10 次）：</strong><br />坐穩椅子前 2/3、手扶椅側或雙手抱單膝，吐氣時將右膝往胸口抬高並微縮肚臍，停 2 秒放下換左腳（強化髂腰肌與核心，預防走路拖步）。</li>
+                </ul>
+              </div>
+              <div>
+                <div class="cue-box">🗣 口令：「腳跟抬高停兩秒～坐穩抱膝肚臍收！」</div>
+                <div class="video-ref-line">🎬 資源：<a class="ext-link" href="https://www.youtube.com/watch?v=X9oDtVUhUB8" target="_blank" rel="noopener">北市體育局：坐姿上肢肌力</a>｜<a class="ext-link" href="https://www.youtube.com/watch?v=ilcK3lOImdI" target="_blank" rel="noopener">椅子有氧</a></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div>
+                <div class="card-title"><span>🎈 三、體能活動：氣球不落地</span><span class="brand-badge">5 分鐘（動作 14）</span></div>
+                <ul class="card-body-text" style="padding-left: 22px; display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
+                  <li><strong>基本規則（全體圍圈）：</strong>長輩圍坐成圓圈，老師拋出大氣球，全班合力用手拍擊讓氣球不能落地，同時大聲數拍擊次數（目標連續 30 下！）。</li>
+                  <li><strong>⬇ 坐姿安全版（降階）：</strong>規定屁股不能離開椅面，訓練上肢伸展、視覺追蹤與軀幹核心穩定。</li>
+                  <li><strong>⬆ 雙重任務版（進階）：</strong>同時放入 2 顆不同顏色氣球，或規定「拍球時要喊出拍球者的名字／一種水果名」！</li>
+                </ul>
+              </div>
+              <div>
+                <div class="cue-box">🗣 口令：「眼睛看氣球，屁股坐穩，手伸長拍出去！」</div>
+                <span class="warn-tag">⚠ 助教在外圍保護，提醒長輩切勿為了救球突然衝出跌倒</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 4: 4. 休息與 ICOPE 認知力衛教 (10分) -->
+        <section class="slide" data-duration="10" id="slide-4">
+          <div class="slide-head">
+            <div>
+              <span class="step-kicker">STAGE 04 · 生理補水 × ICOPE 認知力互動衛教</span>
+              <h2 class="slide-title">4. 中場休息：補水自評 ＆「正常老化 vs. 失智警訊」趨吉避凶</h2>
+            </div>
+            <span class="duration-pill">⏱ 時段：10 分鐘｜衛教資源：<a class="ext-link" href="https://health99.hpa.gov.tw/onlineQuiz/icope" target="_blank" rel="noopener">長者量六力自評</a></span>
+          </div>
+
+          <div class="grid-3">
+            <div class="card" style="background: #f0f9ff; border-color: #7dd3fc;">
+              <div>
+                <div class="card-title"><span>💧 1. 補水與自覺費力 (RPE)</span><span class="brand-badge">3 分鐘</span></div>
+                <p class="card-body-text" style="margin-top: 6px;">邀請全體長輩坐穩小口慢吞 <strong>100～150 ml 溫開水</strong>（低頭吞嚥防嗆咳）。</p>
+                <p class="card-body-text" style="margin-top: 8px;"><strong>運動強度自評：</strong>帶領長輩感受剛才拉彈力帶與拍氣球後的身體感覺——「有一點喘、微流汗，還能跟隔壁聊天（RPE 12–13 分）」就是最棒的護腦運動強度！</p>
+              </div>
+              <div class="cue-box">🗣 口訣：「小口慢吞喝溫水，微喘流汗最護腦！」</div>
+            </div>
+
+            <div class="card" style="background: #fffbeb; border-color: #fcd34d;">
+              <div>
+                <div class="card-title"><span>🧠 2. 正常老化 vs. 失智警訊</span><span class="brand-badge">4 分鐘</span></div>
+                <p class="card-body-text" style="margin-top: 4px;"><strong>💡 開場提問：</strong>「忘記鑰匙放哪裡」跟「忘記自己有鑰匙／拿鑰匙開冰箱」，哪一個比較需要擔心？</p>
+                <ul class="card-body-text" style="padding-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 4px;">
+                  <li><strong>正常老化：</strong>偶爾想不起熟人名字或東西放哪，但經提醒或事後能想起來，生活可自理。</li>
+                  <li><strong>失智警訊：</strong>忘記剛發生的事（重複發問）、在熟悉路口迷路、判斷力與個性明顯改變。</li>
+                </ul>
+              </div>
+              <span class="warn-tag">⚠ 發現警訊及早就醫評估，越早介入越能延緩退化</span>
+            </div>
+
+            <div class="card" style="background: #fdf2f8; border-color: #f9a8d4;">
+              <div>
+                <div class="card-title"><span>🛡️ 3. 預防失智「趨吉避凶」</span><span class="brand-badge">3 分鐘</span></div>
+                <ul class="card-body-text" style="padding-left: 20px; margin-top: 4px; display: flex; flex-direction: column; gap: 5px;">
+                  <li><strong>✨ 趨吉（5 大保護）：</strong>多動腦、多運動、地中海均衡飲食、多社會互動、維持健康體重。</li>
+                  <li><strong>🚫 避凶（4 大危險）：</strong>控制三高、不抽菸、避免頭部外傷、遠離憂鬱與孤立。</li>
+                  <li><strong>🤝 無紙化互動：</strong>兩人一組互問「你昨天晚餐吃什麼？」，答出來立刻擊掌並一起比出<strong>「動腦、動身體、多互動」</strong>手勢！</li>
+                </ul>
+              </div>
+              <div class="video-ref-line">🎬 衛教影片：<a class="ext-link" href="https://www.youtube.com/watch?v=gLLdgBSwStw" target="_blank" rel="noopener">早安健康：防失智手指操</a>｜<a class="ext-link" href="https://www.youtube.com/watch?v=qF74Q0-KqYM" target="_blank" rel="noopener">健腦八式</a></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 5: 5. 播報員 (10分) -->
+        <section class="slide" data-duration="10" id="slide-5">
+          <div class="slide-head">
+            <div>
+              <span class="step-kicker">STAGE 05 · 現實導向 (Reality Orientation) × 時代記憶暖身</span>
+              <h2 class="slide-title">5. 長輩播報員：2 位長輩擔任日期時間與時光機領航播報員</h2>
+            </div>
+            <span class="duration-pill">⏱ 時段：10 分鐘｜角色賦權：無壓力雙人搭檔</span>
+          </div>
+
+          <div class="grid-2">
+            <div class="ro-board">
+              <div>
+                <div class="card-title" style="color: #92400e;">
+                  <span>🎙️ 課堂即時互動播報台（可直接點擊修改上課資訊）</span>
+                  <span class="brand-badge" style="background: #fef3c7; color: #b45309;">投影大字卡</span>
+                </div>
+
+                <div class="ro-inputs-grid">
+                  <div class="ro-field">
+                    <label for="roDateInput">📅 今日日期與星期</label>
+                    <input type="text" id="roDateInput" value="2026 年 11 月 16 日（星期一）" />
+                  </div>
+                  <div class="ro-field">
+                    <label for="roTimeSelect">🕙 目前上課時段與天氣</label>
+                    <select id="roTimeSelect">
+                      <option value="上午 10:00｜☀️ 陽光溫暖晴朗">上午 10:00｜☀️ 陽光溫暖晴朗</option>
+                      <option value="下午 02:00｜⛅ 微風多雲舒適">下午 02:00｜⛅ 微風多雲舒適</option>
+                      <option value="上午 09:30｜🌧️ 外面下小雨（出門帶傘）">上午 09:30｜🌧️ 外面下小雨（出門帶傘）</option>
+                      <option value="下午 03:00｜🌬️ 秋冬微涼（注意保暖）">下午 03:00｜🌬️ 秋冬微涼（注意保暖）</option>
+                    </select>
+                  </div>
+                  <div class="ro-field">
+                    <label for="roHost1Input">🏅 一號播報員（播報日期與護腦口訣）</label>
+                    <input type="text" id="roHost1Input" value="王大哥（第 1 位長輩）" />
+                  </div>
+                  <div class="ro-field">
+                    <label for="roHost2Input">🏅 二號播報員（播報天氣與時光機預告）</label>
+                    <input type="text" id="roHost2Input" value="張大姐（第 2 位長輩）" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="ro-script-preview" id="roLiveScript"></div>
+            </div>
+
+            <div class="card">
+              <div>
+                <div class="card-title"><span>🧠 失智症「雙播報員」帶領步驟（銜接臺灣歷史時光機）</span><span class="brand-badge">現實導向 RO</span></div>
+                <ul class="card-body-text" style="padding-left: 22px; display: flex; flex-direction: column; gap: 8px; margin-top: 6px;">
+                  <li><strong>為什麼安排 2 位長輩搭檔？</strong><br />2 人一組上台（1 人報今日日期與「動腦、動身體、多互動」口訣，1 人報天氣與下一階段活動），彼此扶持不緊張，自然創造社交互動。</li>
+                  <li><strong>第一步（視覺線索提示，不考問）：</strong><br />指著左側投影大字卡，請一號播報員幫大家念出今天的年月日與星期，建立清楚的時間定向感。</li>
+                  <li><strong>第二步（從「今天」穿越回「青春時代」）：</strong><br />由二號播報員報告天氣後，詢問台下長輩：「大家還記得民國 57 年讀國中、或是民國 58 年半夜起來看紅葉少棒比賽的時候，自己幾歲嗎？」自然啟動遠期記憶！</li>
+                  <li><strong>第三步（全班掌聲與啟動時光機）：</strong><br />全班拍手 5 下大聲感謝兩位播報員，並請播報員帶領大家喊「啟動時光機！」，進入 40 分鐘的《臺灣歷史大家來找碴》。</li>
+                </ul>
+              </div>
+              <div class="cue-box">💡 懷舊治療結合現實導向：先穩定「現在的日期時間」，再安全帶領長輩搭乘時光機重溫引以為傲的生命記憶！</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 6: 6. 認知活動：臺灣歷史時光機—大家來找碴 (40分) -->
+        <section class="slide" data-duration="40" id="slide-6">
+          <div class="slide-head">
+            <div>
+              <span class="step-kicker">STAGE 06 · 視覺注意力 × 懷舊治療 × 歷史記憶尋寶（互動投影帶領）</span>
+              <h2 class="slide-title">6. 認知活動：《臺灣歷史時光機—大家來找碴》</h2>
+            </div>
+            <span class="duration-pill">⏱ 時段：40 分鐘｜來源：<a class="ext-link" href="https://mattsue1003.github.io/taiwan-different/" target="_blank" rel="noopener">臺灣歷史時光機官方遊戲</a></span>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div>
+                <div class="card-title">
+                  <span>🕵️ 遊戲規格與 4 步驟核心玩法</span>
+                  <span class="brand-badge" style="background: var(--brand-purple-light); color: var(--brand-purple);">8 段歷史・每關 4 處相異・共 32 處</span>
+                </div>
+                <ul class="card-body-text" style="padding-left: 22px; display: flex; flex-direction: column; gap: 6px; margin-top: 4px;">
+                  <li><strong>關卡與介面規格：</strong>涵蓋 1948–2024 年 <strong>8 段臺灣關鍵歷史記憶</strong>，每關左右並列「原圖」與「找碴圖」，內含 <strong>4 處相異點</strong>（全站共 32 處）；頂部內建<strong>「大字 Mode」</strong>、音效/音樂開關、全螢幕與年代時間軸。</li>
+                  <li><strong>Step 01 啟動時光機：</strong>點擊首頁「啟動時光機」，全班先看年代標題，請長輩猜猜這是哪一個台灣大事件。</li>
+                  <li><strong>Step 02 左右比對點選（0/4 → 4/4）：</strong>觀察左右兩張圖的細節差異（左右兩圖皆可直接點擊），點對即標記<strong>紅色勾勾 ✓</strong> 並累計右上角進度。</li>
+                  <li><strong>Step 03 友善提示不挫折：</strong>若長輩找不到，可點擊左下角<strong>「提示我一處」</strong>，畫面會以<strong>黃色虛線圈圈</strong>溫馨提示位置，維持高成就感。</li>
+                  <li><strong>Step 04 解鎖歷史知識卡：</strong>找齊 4 處後自動彈出「歷史知識卡」，帶領長輩朗讀並分享當年親身經歷，再按「前往下一段 →」！</li>
+                </ul>
+              </div>
+
+              <div style="border-top: 2px solid #cbd5e1; padding-top: 8px; margin-top: 4px;">
+                <div style="font-size: calc(clamp(15.5px, 1.5cqi, 22px) * var(--font-scale)); font-weight: 900; color: var(--brand-purple); margin-bottom: 4px;">
+                  🎯 40 分鐘課堂三階段帶領設計（替代原本顏色形狀配對卡，升級視覺搜尋＋懷舊敘事）：
+                </div>
+                <div class="card-body-text">
+                  ① <strong>年代記憶暖身（5m）</strong>：瀏覽頂部時間軸（1948–2024），挑選長輩最熟悉的年代｜
+                  ② <strong>分組雷達眼找碴（20m）</strong>：將畫面分為「左上、右上、左下、右下」四象限，長輩輪流用手指/雷射筆指出相異處或上台點擊｜
+                  ③ <strong>知識卡懷舊故事會（15m）</strong>：每通關一題，邀請長輩分享「當年你在哪裡？正在做什麼？」。
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div>
+                <div class="card-title"><span>🕰️ 8 大臺灣歷史記憶關卡題庫（點擊年代預覽找碴焦點與懷舊引導）</span><span class="brand-badge">課堂互動導覽</span></div>
+                <p class="card-body-text">老師可點擊下方任一歷史年代，帶領長輩先掌握「觀察線索」與「懷舊聊天話題」，再開啟遊戲挑戰：</p>
+
+                <div class="festival-grid" id="historyGrid">
+                  <button type="button" class="fest-btn active" data-era="0"><span class="fest-btn-name">🚢 1948–49</span><span class="fest-btn-sub">故宮文物遷臺</span></button>
+                  <button type="button" class="fest-btn" data-era="1"><span class="fest-btn-name">🪨 1958 年</span><span class="fest-btn-sub">八二三與民防</span></button>
+                  <button type="button" class="fest-btn" data-era="2"><span class="fest-btn-name">🎒 1968 年</span><span class="fest-btn-sub">九年國民教育</span></button>
+                  <button type="button" class="fest-btn" data-era="3"><span class="fest-btn-name">⚾ 1969 年</span><span class="fest-btn-sub">紅葉金龍少棒</span></button>
+                  <button type="button" class="fest-btn" data-era="4"><span class="fest-btn-name">🕊️ 1987 年</span><span class="fest-btn-sub">解嚴民主轉型</span></button>
+                  <button type="button" class="fest-btn" data-era="5"><span class="fest-btn-name">🗳️ 1996 年</span><span class="fest-btn-sub">首次總統直選</span></button>
+                  <button type="button" class="fest-btn" data-era="6"><span class="fest-btn-name">🤝 1999 年</span><span class="fest-btn-sub">九二一與重建</span></button>
+                  <button type="button" class="fest-btn" data-era="7"><span class="fest-btn-name">🏆 2024 年</span><span class="fest-btn-sub">臺灣棒球登頂</span></button>
+                </div>
+              </div>
+
+              <div class="snap-showcase" id="snapShowcase">
+                <div>
+                  <div style="font-size: calc(clamp(15px, 1.45cqi, 21.5px) * var(--font-scale)); font-weight: 900; color: #5b21b6;" id="eraThemeTitle">🚢 第 1 關（1948–1949）：基隆港・故宮文物遷臺</div>
+                  <div style="font-size: calc(clamp(14px, 1.32cqi, 19px) * var(--font-scale)); color: #334155; font-weight: 700; margin-top: 4px;" id="eraDescText">歷史背景：珍貴文物跨海抵臺，一箱一卷細心守護。｜💬 懷舊提問：有去台北外雙溪或故宮南院看過翠玉白菜嗎？</div>
+                  <div class="snap-pair-pills" style="margin-top: 8px;">
+                    <span class="snap-card-pill" id="eraClue1">🔍 找碴線索 ①：港口船隻與建築細節</span>
+                    <span class="snap-card-pill" id="eraClue2">🔍 找碴線索 ②：文物木箱標籤與數量</span>
+                    <span class="snap-card-pill" id="eraClue3">🔍 找碴線索 ③：人物隨身物件（醫藥箱/水桶）</span>
+                  </div>
+                </div>
+                <a class="page-btn primary" style="text-decoration: none; white-space: nowrap;" href="https://mattsue1003.github.io/taiwan-different/" target="_blank" rel="noopener">啟動時光機網頁 ↗</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 7: 7. 長輩回饋及預告下次活動 (10分) -->
+        <section class="slide" data-duration="10" id="slide-7">
+          <div class="slide-head">
+            <div>
+              <span class="step-kicker">STAGE 07 · 全身 10 式伸展緩和 × 4F 反思回饋 × 回家處方</span>
+              <h2 class="slide-title">7. 長輩回饋及預告下次活動</h2>
+            </div>
+            <span class="duration-pill">⏱ 時段：10 分鐘｜收操 5 分鐘 ＋ 4F 回饋預告 5 分鐘</span>
+          </div>
+
+          <div class="grid-3">
+            <div class="card">
+              <div>
+                <div class="card-title"><span>🧘 一、全身伸展緩和 10 式</span><span class="brand-badge">不彈震・不憋氣</span></div>
+                <ol class="card-body-text" style="padding-left: 24px; display: flex; flex-direction: column; gap: 4px; margin-top: 4px;">
+                  <li><strong>緩和呼吸：</strong>深吸慢吐 6～8 次，調降心跳。</li>
+                  <li><strong>頸側伸展：</strong>左右每邊停留 15 秒 × 2 回。</li>
+                  <li><strong>肩後側伸展：</strong>手臂橫過胸前輕壓，每邊 15 秒。</li>
+                  <li><strong>手臂上舉側彎：</strong>雙手上推左右側彎，各 10 秒 × 2。</li>
+                  <li><strong>坐姿腿後側伸展：</strong>單腳前伸勾腳尖前傾，每腳 20 秒。</li>
+                  <li><strong>小腿伸展：</strong>拉開小腿後側肌群，每腳 20 秒。</li>
+                  <li><strong>翹腳臀部伸展：</strong>每腳 20 秒（⚠髖關節置換者跳過）。</li>
+                  <li><strong>坐姿脊椎旋轉：</strong>左右慢轉伸展背部，每邊 15 秒。</li>
+                  <li><strong>手腕手指伸展：</strong>拉開手腕與手指，每手 15 秒。</li>
+                  <li><strong>身體掃描放鬆：</strong>閉眼從頭到腳放鬆 2 分鐘。</li>
+                </ol>
+              </div>
+              <div class="video-ref-line">🎬 影片：<a class="ext-link" href="https://www.youtube.com/watch?v=Wdn9N1huumE" target="_blank" rel="noopener">仁愛堂 4 分鐘長者伸展</a>｜<a class="ext-link" href="https://www.youtube.com/watch?v=zF_2-21l0cw" target="_blank" rel="noopener">12 分鐘拉筋</a></div>
+            </div>
+
+            <div class="card">
+              <div>
+                <div class="card-title"><span>💬 二、4F 結構化回饋與接龍</span><span class="brand-badge">無紙化口說分享</span></div>
+                <ul class="card-body-text" style="padding-left: 22px; display: flex; flex-direction: column; gap: 7px; margin-top: 6px;">
+                  <li><strong>① Facts（事實回顧）：</strong><br />「今天在《臺灣歷史時光機》裡，哪一個年代的畫面讓你印象最深刻？我們找出了哪些不同？」</li>
+                  <li><strong>② Feelings（情緒感受）：</strong><br />「剛才一起唱《歡喜乾杯》、拍氣球不落地，還有找齊 4 個不同點跳出知識卡時，心情怎麼樣？」</li>
+                  <li><strong>③ Finding（學習發現）：</strong><br />「大家還記得『正常老化』跟『失智警訊』怎麼分辨嗎？護腦三寶手勢怎麼比？」</li>
+                  <li><strong>④ Future（護腦習慣接龍）：</strong><br />全班玩接龍，每人輪流說出一個護腦好習慣，下課前分享一項今天做到的事！</li>
+                </ul>
+              </div>
+              <div class="cue-box">💡 帶領技巧：用手指比出「動腦、動身體、多互動」，全班擊掌肯定彼此！</div>
+            </div>
+
+            <div class="card" style="background: #f0fdf4; border-color: #86efac;">
+              <div>
+                <div class="card-title"><span>📢 三、回家作業＆第 3 週預告</span><span class="brand-badge">延續參與動機</span></div>
+                <ul class="card-body-text" style="padding-left: 22px; display: flex; flex-direction: column; gap: 8px; margin-top: 6px;">
+                  <li><strong>🏠 第 2 週回家護腦處方：</strong>
+                    <br />① 每天做<strong>「防失智手指操 5 分鐘」＋「走路 30 分鐘」</strong>（可邊走邊數數練習雙重任務）。
+                    <br />② 每天跟家人分享或記錄<strong>「一件今天新學到的事物」</strong>。
+                  </li>
+                  <li><strong>🎖️ 預約下週 2 位榮譽播報員：</strong>
+                    <br />邀請 2 位長輩認領第 3 週的「日期時間播報員」，賦予期待感與固定社會角色！
+                  </li>
+                  <li><strong>🗓️ 下週課程預告（第 3 週）：</strong>
+                    <br />主題：<strong>「第 3 週 行動力：肌少症與下肢肌力」</strong>！下週將檢測小腿圍、練習強腿防跌絕招，請穿包覆運動鞋、帶水壺準時見面！
+                  </li>
+                </ul>
+              </div>
+              <div class="cue-box">🗣 收尾口號：全班手比護腦三寶——「動腦、動身體、多互動，我們下週見！」</div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer class="bottombar">
+        <div class="footer-note" id="slideFooterInfo">
+          第 1 / 8 頁｜支援鍵盤 ← → 切換階段｜國軍高雄總醫院屏東分院-屏東市樂智社區服務據點(權責型)
+        </div>
+
+        <div class="nav-btn-group">
+          <button type="button" class="page-btn" id="prevBtn" disabled>← 上一階段</button>
+          <button type="button" class="page-btn primary" id="nextBtn">下一階段 →</button>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const navPills = Array.from(document.querySelectorAll(".nav-pill"));
+      const schedItems = Array.from(document.querySelectorAll(".sched-item"));
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const footerInfo = document.getElementById("slideFooterInfo");
+      const viewportShell = document.getElementById("viewportShell");
+      const presentationStage = document.getElementById("presentationStage");
+      const fullscreenBtn = document.getElementById("fullscreenBtn");
+      const fontZoomBtn = document.getElementById("fontZoomBtn");
+
+      fontZoomBtn.addEventListener("click", () => {
+        const isXl = presentationStage.classList.toggle("font-xl");
+        fontZoomBtn.classList.toggle("active-zoom", isXl);
+        fontZoomBtn.textContent = isXl ? "🔍 標準大字" : "🔍 特大字";
+      });
+
+      const timerDisplay = document.getElementById("timerDisplay");
+      const timerToggleBtn = document.getElementById("timerToggleBtn");
+      const timerResetBtn = document.getElementById("timerResetBtn");
+      let currentSlide = 0;
+      let remainingSeconds = 120 * 60;
+      let timerInterval = null;
+
+      function formatTime(totalSec) {
+        const m = Math.floor(totalSec / 60);
+        const s = totalSec % 60;
+        return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+      }
+
+      function stopTimer() {
+        if (timerInterval) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+        timerToggleBtn.textContent = "▶ 計時";
+      }
+
+      function resetTimerForCurrentSlide() {
+        stopTimer();
+        const mins = parseInt(slides[currentSlide].getAttribute("data-duration") || "10", 10);
+        remainingSeconds = mins * 60;
+        timerDisplay.textContent = formatTime(remainingSeconds);
+      }
+
+      timerToggleBtn.addEventListener("click", () => {
+        if (timerInterval) {
+          stopTimer();
+        } else {
+          timerToggleBtn.textContent = "⏸ 暫停";
+          timerInterval = setInterval(() => {
+            if (remainingSeconds > 0) {
+              remainingSeconds -= 1;
+              timerDisplay.textContent = formatTime(remainingSeconds);
+            } else {
+              stopTimer();
+            }
+          }, 1000);
+        }
+      });
+
+      timerResetBtn.addEventListener("click", resetTimerForCurrentSlide);
+
+      function goToSlide(index) {
+        const target = Math.max(0, Math.min(slides.length - 1, index));
+        currentSlide = target;
+        slides.forEach((s, idx) => s.classList.toggle("active", idx === currentSlide));
+        navPills.forEach((p, idx) => p.classList.toggle("active", idx === currentSlide));
+        prevBtn.disabled = currentSlide === 0;
+        nextBtn.disabled = currentSlide === slides.length - 1;
+        footerInfo.textContent = `第 ${currentSlide + 1} / ${slides.length} 頁｜支援鍵盤 ← → 切換階段｜國軍高雄總醫院屏東分院-屏東市樂智社區服務據點(權責型)`;
+        resetTimerForCurrentSlide();
+      }
+
+      prevBtn.addEventListener("click", () => { if (currentSlide > 0) goToSlide(currentSlide - 1); });
+      nextBtn.addEventListener("click", () => { if (currentSlide < slides.length - 1) goToSlide(currentSlide + 1); });
+
+      navPills.forEach((pill) => {
+        pill.addEventListener("click", () => {
+          const idx = parseInt(pill.getAttribute("data-slide") || "0", 10);
+          goToSlide(idx);
+        });
+      });
+
+      schedItems.forEach((item) => {
+        const handleJump = () => {
+          const idx = parseInt(item.getAttribute("data-jump") || "0", 10);
+          goToSlide(idx);
+        };
+        item.addEventListener("click", handleJump);
+        item.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleJump();
+          }
+        });
+      });
+
+      const roDateInput = document.getElementById("roDateInput");
+      const roTimeSelect = document.getElementById("roTimeSelect");
+      const roHost1Input = document.getElementById("roHost1Input");
+      const roHost2Input = document.getElementById("roHost2Input");
+      const roLiveScript = document.getElementById("roLiveScript");
+
+      function updateRoScript() {
+        const d = roDateInput.value || "今天";
+        const t = roTimeSelect.value || "";
+        const h1 = roHost1Input.value || "一號播報員";
+        const h2 = roHost2Input.value || "二號播報員";
+        roLiveScript.innerHTML =
+          `🎤 <strong>${h1} 播報詞：</strong>「各位老朋友大家好！今天是 <strong>${d}</strong>，記得我們的護腦三寶：動腦、動身體、多互動！」<br/>` +
+          `🎤 <strong>${h2} 播報詞：</strong>「現在時間是 <strong>${t}</strong>，等一下我們要一起搭乘《臺灣歷史時光機》玩大家來找碴喔！」`;
+      }
+
+      [roDateInput, roTimeSelect, roHost1Input, roHost2Input].forEach((el) => {
+        el.addEventListener("input", updateRoScript);
+        el.addEventListener("change", updateRoScript);
+      });
+      updateRoScript();
+
+      const HISTORY_ERAS_DATA = [
+        {
+          icon: "🚢",
+          title: "第 1 關（1948–1949）：基隆港・故宮文物遷臺",
+          desc: "歷史背景：珍貴文物跨海抵臺，一箱一卷細心守護。｜💬 懷舊提問：大家有去過台北外雙溪故宮或故宮南院看翠玉白菜、肉形石嗎？",
+          clue1: "🔍 找碴線索 ①：港口船隻與建築細節",
+          clue2: "🔍 找碴線索 ②：文物木箱標籤與數量",
+          clue3: "🔍 找碴線索 ③：人物隨身物件（醫藥箱/水桶）"
+        },
+        {
+          icon: "🪨",
+          title: "第 2 關（1958 年）：金門・八二三事件與金門民防",
+          desc: "歷史背景：走進花崗岩坑道，看見居民彼此照應的堅韌精神。｜💬 懷舊提問：班上有沒有長輩以前在金門當過兵，或去金門旅遊看過坑道與菜刀？",
+          clue1: "🔍 找碴線索 ①：坑道拱門磚塊與頂部照明燈",
+          clue2: "🔍 找碴線索 ②：手提急救箱 vs 地上麻袋數量",
+          clue3: "🔍 找碴線索 ③：牆角腳踏車與水桶位置"
+        },
+        {
+          icon: "🎒",
+          title: "第 3 關（1968 年）：九年國民義務教育實施",
+          desc: "歷史背景：民國 57 年延長國民義務教育，奠定臺灣人才與經濟起飛基礎。｜💬 懷舊提問：以前上學穿什麼制服？書包裡都帶什麼便當菜？",
+          clue1: "🔍 找碴線索 ①：教室黑板板書與國旗/標語細節",
+          clue2: "🔍 找碴線索 ②：學生制服配件、帽子與書包樣式",
+          clue3: "🔍 找碴線索 ③：課桌椅文具與窗外校園景物"
+        },
+        {
+          icon: "⚾",
+          title: "第 4 關（1969 年）：紅葉少棒與金龍少棒奪冠",
+          desc: "歷史背景：民國 58 年少棒揚威國際，掀起全臺灣徹夜守在電視機前的棒球狂熱！｜💬 懷舊提問：當年有沒有全村擠在一台黑白電視前看轉播？",
+          clue1: "🔍 找碴線索 ①：球員球衣背號、球帽與球棒細節",
+          clue2: "🔍 找碴線索 ②：計分板數字與場邊加油旗幟",
+          clue3: "🔍 找碴線索 ③：觀眾席人物動作與地上棒球數量"
+        },
+        {
+          icon: "🕊️",
+          title: "第 5 關（1987 年）：解除戒嚴與民主轉型",
+          desc: "歷史背景：民國 76 年開放探親與解除戒嚴，報紙增張、社會邁向多元開放。｜💬 懷舊提問：還記得民國 70 幾年的台灣街頭與生活有什麼熱鬧變化嗎？",
+          clue1: "🔍 找碴線索 ①：街頭布條標語與報紙頭版文字",
+          clue2: "🔍 找碴線索 ②：背景招牌、車輛與建築窗戶細節",
+          clue3: "🔍 找碴線索 ③：民眾服裝配件與手持物品差異"
+        },
+        {
+          icon: "🗳️",
+          title: "第 6 關（1996 年）：中華民國首次總統直接民選",
+          desc: "歷史背景：民國 85 年全體公民一人一票直選國家元首，寫下臺灣民主深化里程碑。｜💬 懷舊提問：大家還記得第一次去投票所投總統票的心情嗎？",
+          clue1: "🔍 找碴線索 ①：投票匭標示與圈票處布簾細節",
+          clue2: "🔍 找碴線索 ②：排隊選民手中的選票/身分證與服飾",
+          clue3: "🔍 找碴線索 ③：投開票所牆上海報與時鐘時間"
+        },
+        {
+          icon: "🤝",
+          title: "第 7 關（1999 年）：九二一地震與災後攜手重建",
+          desc: "歷史背景：民國 88 年凝聚全臺灣愛心與互助力量，展現社區復原力與攜手重建的溫暖。｜💬 懷舊提問：當年大家如何互相幫忙、關心鄰居與家人？",
+          clue1: "🔍 找碴線索 ①：救援帳篷標誌與物資箱數量",
+          clue2: "🔍 找碴線索 ②：志工背心、安全帽與手持工具",
+          clue3: "🔍 找碴線索 ③：背景工程車與重建家園細節"
+        },
+        {
+          icon: "🏆",
+          title: "第 8 關（2024 年）：世界冠軍・臺灣棒球登頂",
+          desc: "歷史背景：從 1969 少棒傳奇到 2024 世界 12 強奪冠，臺灣棒球再次站上世界巔峰！｜💬 懷舊提問：看到台灣年輕選手拿到世界冠軍，是不是超感動！",
+          clue1: "🔍 找碴線索 ①：冠軍獎盃、彩帶與記分板細節",
+          clue2: "🔍 找碴線索 ②：球員球衣字樣、手勢與國旗標誌",
+          clue3: "🔍 找碴線索 ③：球場燈光與看台應援道具差異"
+        }
+      ];
+
+      const eraBtns = Array.from(document.querySelectorAll("#historyGrid .fest-btn"));
+      const eraThemeTitle = document.getElementById("eraThemeTitle");
+      const eraDescText = document.getElementById("eraDescText");
+      const eraClue1 = document.getElementById("eraClue1");
+      const eraClue2 = document.getElementById("eraClue2");
+      const eraClue3 = document.getElementById("eraClue3");
+
+      eraBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const idx = parseInt(btn.getAttribute("data-era") || "0", 10);
+          eraBtns.forEach((b, i) => b.classList.toggle("active", i === idx));
+          const era = HISTORY_ERAS_DATA[idx] || HISTORY_ERAS_DATA[0];
+          eraThemeTitle.textContent = `${era.icon} ${era.title}`;
+          eraDescText.textContent = era.desc;
+          eraClue1.textContent = era.clue1;
+          eraClue2.textContent = era.clue2;
+          eraClue3.textContent = era.clue3;
+        });
+      });
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          if (viewportShell.requestFullscreen) {
+            viewportShell.requestFullscreen().then(() => {
+              viewportShell.classList.add("is-fullscreen");
+              fullscreenBtn.textContent = "⛶ 退出全螢幕";
+            }).catch(() => {
+              viewportShell.classList.toggle("is-fullscreen");
+            });
+          } else {
+            viewportShell.classList.toggle("is-fullscreen");
+          }
+        } else if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+
+      fullscreenBtn.addEventListener("click", toggleFullscreen);
+
+      document.addEventListener("fullscreenchange", () => {
+        const isFs = Boolean(document.fullscreenElement);
+        viewportShell.classList.toggle("is-fullscreen", isFs);
+        fullscreenBtn.textContent = isFs ? "⛶ 退出全螢幕" : "⛶ 全螢幕";
+      });
+
+      window.addEventListener("keydown", (e) => {
+        const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : "";
+        if (tag === "input" || tag === "select" || tag === "textarea") return;
+        if (e.key === "ArrowRight" || e.key === "PageDown") {
+          if (currentSlide < slides.length - 1) { e.preventDefault(); goToSlide(currentSlide + 1); }
+        } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+          if (currentSlide > 0) { e.preventDefault(); goToSlide(currentSlide - 1); }
+        }
+      });
+
+      resetTimerForCurrentSlide();
+    })();
+  </script>
+</body>
+</html>
